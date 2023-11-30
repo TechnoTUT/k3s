@@ -1,4 +1,7 @@
 # k3s setup
+## Environment
+Operating System: Oracle Linux 9.3
+It will work on any Linux distribution.
 ## Install k3s
 Install k3s on a single node (master and worker) with the following command:
 ```bash
@@ -76,13 +79,34 @@ Install nfs-subdir-external-provisioner
 helm repo add nfs-subdir-external-provisioner https://kubernetes-sigs.github.io/nfs-subdir-external-provisioner/
 helm install nfs-subdir-external-provisioner nfs-subdir-external-provisioner/nfs-subdir-external-provisioner --set nfs.server=localhost --set nfs.path=/nfs
 ```
-Deploy Kubernetes Dashboard
+
+## Deploy Kubernetes Dashboard
 ```bash
 kubectl apply -f https://raw.githubusercontent.com/technotut/k3s/main/dashboard/recommended.yaml
 kubectl apply -f https://raw.githubusercontent.com/technotut/k3s/main/dashboard/admin.yaml
 kubectl -n kubernetes-dashboard create token admin
+firewall-cmd --add-port=30000/tcp --permanent
+firewall-cmd --reload
 ```
 Access `https://<server-ip>:30000` and login with token
+
+## Install Kompose
+Kompose is convert docker-compose to kubernetes manifest
+```bash
+cd /usr/local/bin
+curl -L https://github.com/kubernetes/kompose/releases/download/v1.31.2/kompose-linux-amd64 -o kompose
+chmod +x kompose
+```
+
+## Install Cloudflared
+```bash
+wget https://github.com/technotut/k3s/raw/main/cloudflared.yaml
+```
+Edit cloudflared.yaml and paste your token
+```bash
+vim cloudflared.yaml
+kubectl apply -f cloudflared.yaml
+```
 
 ## if you want to reset
 k3s uninstall and retry install
