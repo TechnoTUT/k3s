@@ -43,6 +43,7 @@ calicoctl get bgpPeer -o wide
 calicoctl get ippool -o wide
 calicoctl get bgpConfiguration -o wide
 watch kubectl get pod -A -o wide
+ip route
 ```
 
 ## Setup Persistent Volume using nfs-subdir-external-provisioner
@@ -75,6 +76,13 @@ Install nfs-subdir-external-provisioner
 helm repo add nfs-subdir-external-provisioner https://kubernetes-sigs.github.io/nfs-subdir-external-provisioner/
 helm install nfs-subdir-external-provisioner nfs-subdir-external-provisioner/nfs-subdir-external-provisioner --set nfs.server=localhost --set nfs.path=/nfs
 ```
+Deploy Kubernetes Dashboard
+```bash
+kubectl apply -f https://raw.githubusercontent.com/technotut/k3s/main/dashboard/recommended.yaml
+kubectl apply -f https://raw.githubusercontent.com/technotut/k3s/main/dashboard/admin.yaml
+kubectl -n kubernetes-dashboard create token admin
+```
+Access `https://<server-ip>:30000` and login with token
 
 ## if you want to reset
 k3s uninstall and retry install
