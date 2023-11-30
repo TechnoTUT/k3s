@@ -10,7 +10,7 @@ Install Calico
 kubectl create -f https://raw.githubusercontent.com/projectcalico/calico/v3.26.4/manifests/tigera-operator.yaml
 kubectl create -f https://raw.githubusercontent.com/technotut/k3s/main/calico-manifest/custom-resources.yaml
 ```
-Confirm that all of the pods are rimmomg using the following command:
+Confirm that all of the pods are running using the following command:
 ```bash
 watch kubectl get pods --all-namespaces
 ```
