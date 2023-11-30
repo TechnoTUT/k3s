@@ -98,15 +98,22 @@ curl -L https://github.com/kubernetes/kompose/releases/download/v1.31.2/kompose-
 chmod +x kompose
 ```
 
-## Install Cloudflared
+## Install ArgoCD
 ```bash
-wget https://github.com/technotut/k3s/raw/main/cloudflared.yaml
+kubectl create namespace argocd
+kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
+cd /usr/local/bin
+curl -L https://github.com/argoproj/argo-cd/releases/download/v2.9.2/argocd-linux-amd64 -o argocd
+chmod +x argocd
+kubectl patch svc argocd-server -n argocd -p '{"spec": {"type": "LoadBalancer"}}'
+kubectl apply -f https://raw.githubusercontent.com/technotut/k3s/main/argocd/install.yaml
+firewall-cmd --add-port=30001/tcp --permanent
+firewall-cmd --reload
+argocd admin initial-password -n argocd
+argocd login localhost:30001
+argocd account update-password
 ```
-Edit cloudflared.yaml and paste your token
-```bash
-vim cloudflared.yaml
-kubectl apply -f cloudflared.yaml
-```
+Access `https://<server-ip>:30001` and login `admin` with password
 
 ## if you want to reset
 k3s uninstall and retry install
