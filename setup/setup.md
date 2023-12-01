@@ -23,8 +23,8 @@ cd /usr/local/bin
 curl -L https://github.com/projectcalico/calico/releases/download/v3.26.4/calicoctl-linux-amd64 -o calicoctl
 sudo chmod +x ./calicoctl
 ln -s /etc/rancher/k3s/k3s.yaml ~/.kube/config
-calicoctl apply -f https://raw.githubusercontent.com/technotut/k3s/main/calico-manifest/bgppeer.yaml
-calicoctl apply -f https://raw.githubusercontent.com/technotut/k3s/main/calico-manifest/bgpconfig.yaml
+calicoctl apply -f https://raw.githubusercontent.com/technotut/k3s/main/setup/calico-manifest/bgppeer.yaml
+calicoctl apply -f https://raw.githubusercontent.com/technotut/k3s/main/setup/calico-manifest/bgpconfig.yaml
 ```
 Configure Router
 ```
@@ -82,8 +82,8 @@ helm install nfs-subdir-external-provisioner nfs-subdir-external-provisioner/nfs
 
 ## Deploy Kubernetes Dashboard
 ```bash
-kubectl apply -f https://raw.githubusercontent.com/technotut/k3s/main/dashboard/recommended.yaml
-kubectl apply -f https://raw.githubusercontent.com/technotut/k3s/main/dashboard/admin.yaml
+kubectl apply -f https://raw.githubusercontent.com/technotut/k3s/main/setup/dashboard/recommended.yaml
+kubectl apply -f https://raw.githubusercontent.com/technotut/k3s/main/setup/dashboard/admin.yaml
 kubectl -n kubernetes-dashboard create token admin
 firewall-cmd --add-port=30000/tcp --permanent
 firewall-cmd --reload
@@ -106,7 +106,7 @@ cd /usr/local/bin
 curl -L https://github.com/argoproj/argo-cd/releases/download/v2.9.2/argocd-linux-amd64 -o argocd
 chmod +x argocd
 kubectl patch svc argocd-server -n argocd -p '{"spec": {"type": "LoadBalancer"}}'
-kubectl apply -f https://raw.githubusercontent.com/technotut/k3s/main/argocd/install.yaml
+kubectl apply -f https://raw.githubusercontent.com/technotut/k3s/main/setup/argocd/install.yaml
 firewall-cmd --add-port=30001/tcp --permanent
 firewall-cmd --reload
 argocd admin initial-password -n argocd
