@@ -39,7 +39,7 @@ spec:
               name: grafana-hostpath0
       restartPolicy: Always
       volumes:
-        - hostPath:
-            path: ../grafana
-          name: grafana-hostpath0
+        - name: grafana-claim0
+          persistentVolumeClaim:
+            claimName: grafana-claim0
 status: {}

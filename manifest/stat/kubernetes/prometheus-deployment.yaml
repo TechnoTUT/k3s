@@ -42,6 +42,6 @@ spec:
       restartPolicy: Always
       volumes:
         - hostPath:
-            path: ../prometheus
+            path: /etc/prometheus
           name: prometheus-hostpath0
 status: {}

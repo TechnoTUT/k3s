@@ -40,6 +40,6 @@ spec:
       restartPolicy: Always
       volumes:
         - hostPath:
-            path: ../snmp-exporter/snmp.yml
+            path: /etc/prometheus/snmp.yml
           name: snmp-exporter-hostpath0
 status: {}
