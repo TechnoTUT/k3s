@@ -11,7 +11,7 @@ curl -sfL https://get.k3s.io | K3S_KUBECONFIG_MODE="644" INSTALL_K3S_EXEC="--fla
 Install Calico
 ```bash
 kubectl create -f https://raw.githubusercontent.com/projectcalico/calico/v3.26.4/manifests/tigera-operator.yaml
-kubectl create -f https://raw.githubusercontent.com/technotut/k3s/main/calico-manifest/custom-resources.yaml
+kubectl create -f https://raw.githubusercontent.com/technotut/k3s/main/setup/calico-manifest/custom-resources.yaml
 ```
 Confirm that all of the pods are running using the following command:
 ```bash
@@ -23,14 +23,21 @@ cd /usr/local/bin
 curl -L https://github.com/projectcalico/calico/releases/download/v3.26.4/calicoctl-linux-amd64 -o calicoctl
 sudo chmod +x ./calicoctl
 ln -s /etc/rancher/k3s/k3s.yaml ~/.kube/config
-calicoctl apply -f https://raw.githubusercontent.com/technotut/k3s/main/setup/calico-manifest/bgppeer.yaml
-calicoctl apply -f https://raw.githubusercontent.com/technotut/k3s/main/setup/calico-manifest/bgpconfig.yaml
+wget https://raw.githubusercontent.com/technotut/k3s/main/setup/calico-manifest/bgppeer.yaml
+wget https://raw.githubusercontent.com/technotut/k3s/main/setup/calico-manifest/bgpconfig.yaml
+calicoctl apply -f bgppeer.yaml
+calicoctl apply -f bgpconfig.yaml
+firewall-cmd --add-port=179/tcp --permanent
+firewall-cmd --add-port=6443/tcp --permanent
+firewall-cmd --add-port=10250/tcp --permanent
+firewall-cmd --zone=trusted --add-source=10.43.0.0/16 --permanent
+firewall-cmd --zone=trusted --add-source=10.244.0.0/16 --permanent
+firewall-cmd --zone=trusted --add-source=<client-cidr> --permanent
+firewall-cmd --reload
 ```
 Configure Router
 ```
 ## NEC IX, Cisco IOS
-enable
-configure terminal (only Cisco)
 router bgp 65000
 neighbor <server-ip> remote-as 65000
 exit
@@ -114,6 +121,7 @@ argocd login localhost:30001
 argocd account update-password
 ```
 Access `https://<server-ip>:30001` and login `admin` with password
+If you can't login, check [this](https://github.com/argoproj/argo-cd/issues/10708)
 
 ## if you want to reset
 k3s uninstall and retry install
