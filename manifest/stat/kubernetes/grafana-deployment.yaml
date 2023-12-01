@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   annotations:
-    kompose.cmd: kompose -f ../docker-compose.yml convert --volumes=hostPath
+    kompose.cmd: kompose -f ../docker-compose.yml convert
     kompose.version: 1.30.0 (9d8dcb518)
   creationTimestamp: null
   labels:
@@ -19,7 +19,7 @@ spec:
   template:
     metadata:
       annotations:
-        kompose.cmd: kompose -f ../docker-compose.yml convert --volumes=hostPath
+        kompose.cmd: kompose -f ../docker-compose.yml convert
         kompose.version: 1.30.0 (9d8dcb518)
       creationTimestamp: null
       labels:
@@ -36,7 +36,7 @@ spec:
           resources: {}
           volumeMounts:
             - mountPath: /var/lib/grafana
-              name: grafana-hostpath0
+              name: grafana-claim0
       restartPolicy: Always
       volumes:
         - name: grafana-claim0
