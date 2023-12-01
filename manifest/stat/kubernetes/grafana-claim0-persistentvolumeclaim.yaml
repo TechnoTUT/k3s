@@ -5,7 +5,7 @@ metadata:
   labels:
     io.kompose.service: grafana-claim0
   name: grafana-claim0
-  namespace: stat
+  namespace: default
 spec:
   accessModes:
     - ReadWriteOnce
