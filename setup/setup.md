@@ -108,12 +108,10 @@ chmod +x kompose
 ## Install ArgoCD
 ```bash
 kubectl create namespace argocd
-kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
+kubectl apply -n argocd -f https://raw.githubusercontent.com/technotut/k3s/main/setup/argocd/install.yaml
 cd /usr/local/bin
 curl -L https://github.com/argoproj/argo-cd/releases/download/v2.9.2/argocd-linux-amd64 -o argocd
 chmod +x argocd
-kubectl patch svc argocd-server -n argocd -p '{"spec": {"type": "LoadBalancer"}}'
-kubectl apply -f https://raw.githubusercontent.com/technotut/k3s/main/setup/argocd/install.yaml
 firewall-cmd --add-port=30001/tcp --permanent
 firewall-cmd --reload
 argocd admin initial-password -n argocd
