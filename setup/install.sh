@@ -8,17 +8,9 @@ echo "Installing k3s"
 curl -sfL https://get.k3s.io | K3S_KUBECONFIG_MODE="644" INSTALL_K3S_EXEC="--flannel-backend=none --cluster-cidr=10.244.0.0/16 --disable-network-policy --disable=traefik" sh -
 
 echo "Installing network plugin"
-kubectl create -f https://raw.githubusercontent.com/projectcalico/calico/v3.26.4/manifests/tigera-operator.yaml
-kubectl create -f https://raw.githubusercontent.com/technotut/k3s/main/setup/calico-manifest/custom-resources.yaml
-kubectl get pods --all-namespaces
 cd /usr/local/bin
 curl -L https://github.com/projectcalico/calico/releases/download/v3.26.4/calicoctl-linux-amd64 -o calicoctl
 sudo chmod +x ./calicoctl
-ln -s /etc/rancher/k3s/k3s.yaml ~/.kube/config
-wget https://raw.githubusercontent.com/technotut/k3s/main/setup/calico-manifest/bgppeer.yaml
-wget https://raw.githubusercontent.com/technotut/k3s/main/setup/calico-manifest/bgpconfig.yaml
-calicoctl apply -f bgppeer.yaml
-calicoctl apply -f bgpconfig.yaml
 firewall-cmd --add-port=179/tcp --permanent
 firewall-cmd --add-port=6443/tcp --permanent
 firewall-cmd --add-port=10250/tcp --permanent
@@ -26,13 +18,6 @@ firewall-cmd --zone=trusted --add-source=10.43.0.0/16 --permanent
 firewall-cmd --zone=trusted --add-source=10.244.0.0/16 --permanent
 firewall-cmd --zone=trusted --add-source=<client-cidr> --permanent
 firewall-cmd --reload
-
-echo "Show Network Status"
-calicoctl get nodes -o wide
-calicoctl get bgpPeer -o wide
-calicoctl get ippool -o wide
-calicoctl get bgpConfiguration -o wide
-kubectl get pod -A -o wide
 
 echo "Setup Persistent Volume"
 mkdir /nfs
@@ -59,16 +44,10 @@ curl -L https://github.com/kubernetes/kompose/releases/download/v1.31.2/kompose-
 chmod +x kompose
 
 echo "Install ArgoCD"
-kubectl create namespace argocd
-kubectl apply -n argocd -f https://raw.githubusercontent.com/technotut/k3s/main/setup/argocd/install.yaml
 cd /usr/local/bin
 curl -L https://github.com/argoproj/argo-cd/releases/download/v2.9.2/argocd-linux-amd64 -o argocd
 chmod +x argocd
 firewall-cmd --add-port=30001/tcp --permanent
 firewall-cmd --reload
-argocd admin initial-password -n argocd
 
-echo "Continue with the following command to setup ArgoCD"
-echo "argocd login localhost:30001"
-echo "argocd account update-password"
-echo "Access https://localhost:30001 and login with the password"
+echo "Execute apply.sh to apply the manifest"
