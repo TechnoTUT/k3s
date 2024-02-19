@@ -16,6 +16,10 @@ calicoctl get ippool -o wide
 calicoctl get bgpConfiguration -o wide
 kubectl get pod -A -o wide
 
+echo "Installing NFS Subdir External Provisioner"
+helm repo add nfs-subdir-external-provisioner https://kubernetes-sigs.github.io/nfs-subdir-external-provisioner/
+helm install nfs-subdir-external-provisioner nfs-subdir-external-provisioner/nfs-subdir-external-provisioner --set nfs.server=localhost --set nfs.path=/nfs
+
 echo "Installing ArgoCD"
 kubectl create namespace argocd
 kubectl apply -n argocd -f https://raw.githubusercontent.com/technotut/k3s/main/setup/argocd/install.yaml

@@ -33,10 +33,8 @@ echo "Installing Helm"
 cd /usr/local/bin
 wget https://get.helm.sh/helm-v3.13.2-linux-amd64.tar.gz
 tar -zxvf helm-v3.13.2-linux-amd64.tar.gz
-mv linux-amd64/helm /usr/local/bin/helm 
-echo "Installing NFS Subdir External Provisioner"
-helm repo add nfs-subdir-external-provisioner https://kubernetes-sigs.github.io/nfs-subdir-external-provisioner/
-helm install nfs-subdir-external-provisioner nfs-subdir-external-provisioner/nfs-subdir-external-provisioner --set nfs.server=localhost --set nfs.path=/nfs
+mv linux-amd64/helm /usr/local/bin/helm
+rm -f helm-v3.13.2-linux-amd64.tar.gz
 
 echo "Install Kompose"
 cd /usr/local/bin

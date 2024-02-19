@@ -2,6 +2,14 @@
 ## Environment
 Operating System: Oracle Linux 9.3
 It will work on any Linux distribution.
+## Script
+```bash
+$ git clone https://github.com/technotut/k3s.git
+$ cd k3s/setup
+$ chmod +x setup.sh
+$ sudo ./setup.sh
+$ ./apply.sh
+```
 ## Install k3s
 Install k3s on a single node (master and worker) with the following command:
 ```bash
