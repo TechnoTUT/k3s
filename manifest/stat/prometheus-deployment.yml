@@ -23,9 +23,14 @@ spec:
             - containerPort: 9090
           volumeMounts:
             - mountPath: /etc/prometheus
-              name: prometheus-volume
+              name: prometheus-config
+            - mountPath: /prometheus
+              name: prometheus-data
       volumes:
-        - name: prometheus-volume
+        - name: prometheus-config
           configMap:
             name: prometheus-config
+        - name: prometheus-data
+          persistentVolumeClaim:
+            claimName: prometheus-volume
 status: {}
