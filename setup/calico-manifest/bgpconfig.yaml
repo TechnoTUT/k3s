@@ -6,3 +6,5 @@ spec:
   logSeverityScreen: Info
   nodeToNodeMeshEnabled: false
   asNumber: 65000
+  serviceLoadBalancerIP:
+    - cidr: 10.33.0.0/16

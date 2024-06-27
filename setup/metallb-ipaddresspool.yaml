@@ -1,0 +1,7 @@
+kind: IPAddressPool
+metadata:
+  name: default
+  namespace: metallb-system
+spec:
+  addresses:
+  - 10.33.0.0/16
