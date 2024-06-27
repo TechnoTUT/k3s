@@ -13,7 +13,7 @@ $ ./apply.sh
 ## Install k3s
 Install k3s on a single node (master and worker) with the following command:
 ```bash
-curl -sfL https://get.k3s.io | K3S_KUBECONFIG_MODE="644" INSTALL_K3S_EXEC="--flannel-backend=none --cluster-cidr=10.244.0.0/16 --disable-network-policy --disable=traefik" sh -
+curl -sfL https://get.k3s.io | K3S_KUBECONFIG_MODE="644" INSTALL_K3S_EXEC="--flannel-backend=none --cluster-cidr=10.244.0.0/16 --disable-network-policy --disable=traefik ----disable=servicelb" sh -
 ```
 ## Network settings
 Install Calico
@@ -93,6 +93,20 @@ Install nfs-subdir-external-provisioner
 ```bash
 helm repo add nfs-subdir-external-provisioner https://kubernetes-sigs.github.io/nfs-subdir-external-provisioner/
 helm install nfs-subdir-external-provisioner nfs-subdir-external-provisioner/nfs-subdir-external-provisioner --set nfs.server=localhost --set nfs.path=/nfs
+```
+
+## Setup MetalLB
+```bash
+kubectl apply -f https://raw.githubusercontent.com/technotut/k3s/main/setup/metallb/metallb.yaml
+kubectl apply -f https://raw.githubusercontent.com/technotut/k3s/main/setup/metallb/metallb-ipaddresspool.yaml
+```
+
+## Setup Ingress Controller
+Use ingress-nginx
+```bash
+helm upgrade --install ingress-nginx ingress-nginx \
+  --repo https://kubernetes.github.io/ingress-nginx \
+  --namespace ingress-nginx --create-namespace
 ```
 
 ## Deploy Kubernetes Dashboard
