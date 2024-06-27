@@ -4,6 +4,7 @@ metadata:
   labels:
     app: metallb
   name: controller
+  namespace: metallb-system
 spec:
   allowPrivilegeEscalation: false
   allowedCapabilities: []
