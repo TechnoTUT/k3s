@@ -10,9 +10,11 @@ spec:
     app: rtmp-live-server
   type: LoadBalancer
   ports:
-    - protocol: TCP
+    - name: rtmp
+      protocol: TCP
       port: 1935
       targetPort: 1935
-    - protocol: TCP
+    - name: http
+      protocol: TCP
       port: 8080
       targetPort: 8080
