@@ -24,8 +24,10 @@ spec:
         - name: UPSTREAM_DNS
           value: "192.168.99.1"
         ports:
-        - containerPort: 53/udp
-        - containerPort: 53/tcp
+        - containerPort: 53
+          protocol: UDP
+        - containerPort: 53
+          protocol: TCP
         resources:
           limits:
             cpu: 1
