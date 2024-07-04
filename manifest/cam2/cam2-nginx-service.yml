@@ -5,6 +5,8 @@ metadata:
   labels:
     app: cam2-sonycam-nginx
   namespace: cam2
+  annotations:
+    external-dns.alpha.kubernetes.io/hostname: cam2.kube.technotut.net
 spec:
   selector:
     app: cam2-sonycam-nginx

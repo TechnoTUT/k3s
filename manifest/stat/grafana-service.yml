@@ -3,6 +3,8 @@ kind: Service
 metadata:
   name: grafana-service
   namespace: monitoring
+  annotations:
+    external-dns.alpha.kubernetes.io/hostname: stat.kube.technotut.net
 spec:
   selector: 
     app: grafana
