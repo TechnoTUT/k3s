@@ -12,7 +12,7 @@ releases:
         domainFilters:
           - kube.technotut.net
         rfc2136:
-          host: kube.intra.technotut.net
+          host: ipa.intra.technotut.net
           zone: kube.technotut.net
           tsigKeyname: externaldns
           tsigSecretAlg: hmac-sha256
