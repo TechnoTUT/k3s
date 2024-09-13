@@ -13,7 +13,7 @@ $ ./apply.sh
 ## Install k3s
 Install k3s on a single node (master and worker) with the following command:
 ```bash
-curl -sfL https://get.k3s.io | K3S_KUBECONFIG_MODE="644" INSTALL_K3S_EXEC="--flannel-backend=none --cluster-cidr=10.244.0.0/16 --disable-network-policy --disable=traefik ----disable=servicelb" sh -
+curl -sfL https://get.k3s.io | K3S_KUBECONFIG_MODE="644" INSTALL_K3S_EXEC="--flannel-backend=none --cluster-cidr=10.244.0.0/16 --disable-network-policy --disable=traefik --disable=servicelb" sh -
 ```
 ## Network settings
 Install Calico
