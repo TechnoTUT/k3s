@@ -20919,14 +20919,16 @@ metadata:
     app.kubernetes.io/name: argocd-server
     app.kubernetes.io/part-of: argocd
   name: argocd-server
+  annotations:
+    external-dns.alpha.kubernetes.io/hostname: cd.kube.technotut.net
 spec:
-  type: NodePort
+  type: LoadBalancer
+  loadBalancerIP: 10.33.1.1
   ports:
   - name: http
     port: 80
     protocol: TCP
     targetPort: 8080
-    nodePort: 30001
   - name: https
     port: 443
     protocol: TCP
