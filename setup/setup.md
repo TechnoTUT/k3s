@@ -18,7 +18,7 @@ curl -sfL https://get.k3s.io | K3S_KUBECONFIG_MODE="644" INSTALL_K3S_EXEC="--fla
 ## Network settings
 Install Calico
 ```bash
-kubectl create -f https://raw.githubusercontent.com/projectcalico/calico/v3.26.4/manifests/tigera-operator.yaml
+kubectl create -f https://raw.githubusercontent.com/projectcalico/calico/v3.28.1/manifests/tigera-operator.yaml
 kubectl create -f https://raw.githubusercontent.com/technotut/k3s/main/setup/calico-manifest/custom-resources.yaml
 ```
 Confirm that all of the pods are running using the following command:
@@ -28,9 +28,10 @@ watch kubectl get pods --all-namespaces
 Install Calicoctl and configure
 ```bash
 cd /usr/local/bin
-curl -L https://github.com/projectcalico/calico/releases/download/v3.26.4/calicoctl-linux-amd64 -o calicoctl
-sudo chmod +x ./calicoctl
+curl -L https://github.com/projectcalico/calico/releases/download/v3.28.1/calicoctl-linux-amd64 -o calicoctl
+chmod +x ./calicoctl
 ln -s /etc/rancher/k3s/k3s.yaml ~/.kube/config
+cd
 wget https://raw.githubusercontent.com/technotut/k3s/main/setup/calico-manifest/bgppeer.yaml
 wget https://raw.githubusercontent.com/technotut/k3s/main/setup/calico-manifest/bgpconfig.yaml
 calicoctl apply -f bgppeer.yaml
@@ -38,6 +39,7 @@ calicoctl apply -f bgpconfig.yaml
 firewall-cmd --add-port=179/tcp --permanent
 firewall-cmd --add-port=6443/tcp --permanent
 firewall-cmd --add-port=10250/tcp --permanent
+firewall-cmd --zone=trusted --add-source=10.33.0.0/16 --permanent
 firewall-cmd --zone=trusted --add-source=10.43.0.0/16 --permanent
 firewall-cmd --zone=trusted --add-source=10.244.0.0/16 --permanent
 firewall-cmd --zone=trusted --add-source=<client-cidr> --permanent
@@ -108,16 +110,6 @@ helm upgrade --install ingress-nginx ingress-nginx \
   --repo https://kubernetes.github.io/ingress-nginx \
   --namespace ingress-nginx --create-namespace
 ```
-
-## Deploy Kubernetes Dashboard
-```bash
-kubectl apply -f https://raw.githubusercontent.com/technotut/k3s/main/setup/dashboard/recommended.yaml
-kubectl apply -f https://raw.githubusercontent.com/technotut/k3s/main/setup/dashboard/admin.yaml
-kubectl -n kubernetes-dashboard create token admin
-firewall-cmd --add-port=30000/tcp --permanent
-firewall-cmd --reload
-```
-Access `https://<server-ip>:30000` and login with token
 
 ## Install Kompose
 Kompose is convert docker-compose to kubernetes manifest
