@@ -1,0 +1,22 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: coredns-configmap
+  namespace: coredns
+data:
+  Corefile: |
+    kube.technotut.net {
+        etcd {
+            path /skydns
+            endpoint http://etcd.coredns.svc.cluster.local:2379
+            fallthrough
+        }
+        hosts
+        cache
+        errors
+        log
+    }
+
+    . {
+        forward . 192.168.99.51
+    }

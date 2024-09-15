@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: coredns-custom
+  namespace: coredns
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: coredns
+  template:
+    metadata:
+      namespace: coredns
+    spec:
+      containers:
+        - name: coredns
+          image: coredns/coredns:1.11.3
+          args:
+            - -conf
+            - /etc/coredns/Corefile
+          volumeMounts:
+            - name: config-volume
+              mountPath: /etc/coredns
+              readOnly: true
+      volumes:
+        - name: config-volume
+          configMap:
+            name: coredns-configmap
