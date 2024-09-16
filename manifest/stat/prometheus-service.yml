@@ -3,10 +3,13 @@ kind: Service
 metadata:
   name: prometheus-service
   namespace: monitoring
+  annotations:
+    external-dns.alpha.kubernetes.io/hostname: prom.kube.technotut.net
 spec:
   selector: 
     app: prometheus
-  type: ClusterIP
+  type: LoadBalancer
+  loadBalancerIP: 10.33.1.0
   ports:
     - port: 9090
       targetPort: 9090

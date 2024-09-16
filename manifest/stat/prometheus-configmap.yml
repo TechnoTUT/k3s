@@ -43,13 +43,18 @@ data:
     - job_name: 'ndi_system'
       static_configs:
         - targets: ['192.168.20.201:9100','192.168.20.202:9100','192.168.20.203:9100']
-    - job_name: 'kubernetes-nodes'
-      scheme: https
-      tls_config:
-        ca_file: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
-      bearer_token_file: /var/run/secrets/kubernetes.io/serviceaccount/token
+    - job_name: "service_kube-state-metrics"
       kubernetes_sd_configs:
-      - role: node
+      - role: service
       relabel_configs:
+      - source_labels: [__meta_kubernetes_service_label_app_kubernetes_io_name]
+        action: keep
+        regex: kube-state-metrics
       - action: labelmap
-        regex: __meta_kubernetes_node_label_(.+)
+        regex: __meta_kubernetes_service_label_(.+)
+      - source_labels: [__meta_kubernetes_namespace]
+        action: replace
+        target_label: namespace
+      - source_labels: [__meta_kubernetes_service_name]
+        action: replace
+        target_label: service
