@@ -2,14 +2,6 @@
 ## Environment
 Operating System: Oracle Linux 9.3
 It will work on any Linux distribution.
-## Script
-```bash
-$ git clone https://github.com/technotut/k3s.git
-$ cd k3s/setup
-$ chmod +x setup.sh
-$ sudo ./setup.sh
-$ ./apply.sh
-```
 ## Install k3s
 Install k3s on a single node (master and worker) with the following command:
 ```bash
@@ -119,20 +111,27 @@ curl -L https://github.com/kubernetes/kompose/releases/download/v1.31.2/kompose-
 chmod +x kompose
 ```
 
+## Install ExternalDNS
+```bash
+wget https://raw.githubusercontent.com/technotut/k3s/main/setup/externaldns/externaldns.yaml
+## Edit secret
+kubectl apply -f externaldns.yaml
+```
+
 ## Install ArgoCD
 ```bash
 kubectl create namespace argocd
-kubectl apply -n argocd -f https://raw.githubusercontent.com/technotut/k3s/main/setup/argocd/install.yaml
+kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
+kubectl patch svc argocd-server -n argocd -p '{"spec": {"type": "LoadBalancer"}}'
+kubectl patch svc argocd-server -n argocd -p '{"metadata": {"annotations": {"external-dns.alpha.kubernetes.io/hostname": "argocd.kube.technotut.net"}}}'
 cd /usr/local/bin
-curl -L https://github.com/argoproj/argo-cd/releases/download/v2.9.2/argocd-linux-amd64 -o argocd
+curl -L https://github.com/argoproj/argo-cd/releases/download/v2.11.8/argocd-linux-amd64 -o argocd
 chmod +x argocd
-firewall-cmd --add-port=30001/tcp --permanent
-firewall-cmd --reload
 argocd admin initial-password -n argocd
-argocd login localhost:30001
+argocd login argocd.kube.technotut.net
 argocd account update-password
 ```
-Access `https://<server-ip>:30001` and login `admin` with password
+Access `https://cd.kube.technotut.net` and login `admin` with password
 If you can't login, check [this](https://github.com/argoproj/argo-cd/issues/10708)
 
 ## if you want to reset
