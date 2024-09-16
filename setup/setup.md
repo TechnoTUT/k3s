@@ -112,6 +112,51 @@ chmod +x kompose
 ```
 
 ## Install ExternalDNS
+ Confidure Outside BIND Server
+```bash
+ssh root@192.168.99.51
+tsig-keygen -a hmac-sha256 externaldns
+## Copy secret
+vi /etc/named.conf
+```
+``` /etc/named.conf
+key "externaldns" {
+        algorithm hmac-sha256;
+        secret "<secret>";
+};
+
+zone "kube.technotut.net" IN {
+    type master;
+    file "kube.technotut.net.zone";
+    allow-transfer {
+        key "externaldns";
+    };
+    update-policy {
+        grant externaldns zonesub ANY;
+    };
+};
+```
+```bash
+vi /var/named/kube.technotut.net.zone
+```
+``` /var/named/kube.technotut.net.zone
+$TTL 60 ; 1 minute
+kube.technotut.net.         IN SOA  kube.technotut.net. root.kube.technotut.net. (
+                                16         ; serial
+                                60         ; refresh (1 minute)
+                                60         ; retry (1 minute)
+                                60         ; expire (1 minute)
+                                60         ; minimum (1 minute)
+                                )
+                        NS      ns.kube.technotut.net.
+			A	192.168.99.51
+ns                      A       192.168.99.51
+```
+Restart named
+```bash
+systemctl restart named
+```
+Install ExternalDNS
 ```bash
 wget https://raw.githubusercontent.com/technotut/k3s/main/setup/externaldns/externaldns.yaml
 ## Edit secret
