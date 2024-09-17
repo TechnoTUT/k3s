@@ -179,6 +179,27 @@ argocd account update-password
 Access `https://cd.kube.technotut.net` and login `admin` with password
 If you can't login, check [this](https://github.com/argoproj/argo-cd/issues/10708)
 
+## Install Rancher
+```bash
+helm repo add rancher-stable https://releases.rancher.com/server-charts/stable
+kubectl create namespace cattle-system
+```
+Install cert-manager
+```bash
+helm repo add jetstack https://charts.jetstack.io --force-update
+helm install \
+cert-manager jetstack/cert-manager \
+--namespace cert-manager \
+--create-namespace \
+--version v1.15.3 \
+--set crds.enabled=true
+```
+```bash
+helm install rancher rancher-stable/rancher --namespace cattle-system --set hostname=rancher.kube.technotut.net --set bootstrapPassword=admin
+kubectl patch svc rancher -n cattle-system -p '{"spec": {"type": "LoadBalancer"}}'
+kubectl patch svc rancher -n cattle-system -p '{"metadata": {"annotations": {"external-dns.alpha.kubernetes.io/hostname": "rancher.kube.technotut.net"}}}'
+```
+
 ## if you want to reset
 k3s uninstall and retry install
 ```bash
