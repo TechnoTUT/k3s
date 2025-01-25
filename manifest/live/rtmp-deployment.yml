@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
       - name: rtmp-live-server
-        image: ghcr.io/technotut/rtmp-live-server:stretch
+        image: ghcr.io/technotut/rtmp-live-server:main
         imagePullPolicy: Always
         ports:
         - containerPort: 1935
@@ -27,4 +27,3 @@ spec:
             cpu: 1
             memory: 256Mi
       restartPolicy: Always
-status: {}
